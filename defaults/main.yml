@@ -1,0 +1,7 @@
+---
+# defaults file for dotnet_install
+dotnet_install_mirror: https://dotnet.microsoft.com/download/dotnet/scripts
+dotnet_install_ver:
+  major: 1
+dotnet_install_script_type: sh
+dotnet_install_dir: /usr/local/bin

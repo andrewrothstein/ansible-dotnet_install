@@ -1,0 +1,5 @@
+---
+# vars file for dotnet_install
+dotnet_install_url: '{{ dotnet_install_mirror }}/v{{ dotnet_install_ver.major }}/dotnet-install.{{ dotnet_install_script_type }}'
+dotnet_install_exe: '{{ dotnet_install_dir }}/dotnet-install-v{{ dotnet_install_ver.major }}.{{ dotnet_install_script_type }}'
+dotnet_install_link: '{{ dotnet_install_dir }}/dotnet-install.{{ dotnet_install_script_type }}'

@@ -1,0 +1,5 @@
+---
+dotnet_install_vars:
+  install_dir: '{% if dotnet_install.install_dir is defined %}{{ dotnet_install.install_dir }}{% else %}{{ lookup("env", "DOTNET_INSTALL_DIR") | default(ansible_env.HOME, true ) }}{% endif %}'
+  channel: '{{ dotnet_install.channel | default("LTS") }}'
+  version: '{{ dotnet_install.version | default("latest") }}'

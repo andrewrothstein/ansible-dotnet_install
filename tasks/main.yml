@@ -1,0 +1,36 @@
+---
+- name: resolve platform specific vars
+  include_vars: '{{ item }}'
+  with_first_found:
+    - files:
+        - '{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml'
+        - '{{ ansible_distribution }}.yml'
+        - '{{ ansible_os_family }}.yml'
+      skip: true
+      paths:
+        - '{{ role_path }}/vars'
+- name: installing OS pkg dependencies
+  become: true
+  become_user: root
+  package:
+    name: '{{ dotnet_install_os_dep_pkgs | default([]) }}'
+    state: present
+- name: installing {{ dotnet_install_url }} to {{ dotnet_install_exe }}
+  become: true
+  become_user: root
+  get_url:
+    url: '{{ dotnet_install_url }}'
+    dest: '{{ dotnet_install_exe }}'
+    mode: 0755
+- name: linking {{ dotnet_install_link }} to {{ dotnet_install_exe }}
+  become: true
+  become_user: root
+  file:
+    src: '{{ dotnet_install_exe }}'
+    dest: '{{ dotnet_install_link }}'
+    state: link
+- name: install dotnet distributions...
+  loop: '{{ dotnet_installs | default([]) }}'
+  loop_control:
+    loop_var: dotnet_install
+  include_tasks: dotnet_install_{{ dotnet_install_script_type }}_tasks.yml

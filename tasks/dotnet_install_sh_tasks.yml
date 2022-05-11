@@ -1,0 +1,34 @@
+---
+- include_vars:
+    file: resolve_dotnet_install_vars.yml
+- name: resolving full dotnet-install command
+  set_fact:
+    dotnet_install_cmd: >-
+      dotnet-install.sh
+      --install-dir {{ dotnet_install_vars.install_dir }}
+      --channel {{ dotnet_install_vars.channel }}
+      --version {{ dotnet_install_vars.version }}
+      {% if dotnet_install.quality is defined %}--quality {{ dotnet_install.quality }}{% endif %}
+      {% if dotnet_install.internal is defined %}--internal{% endif %}
+      {% if dotnet_install.feed_credential is defined %}--feed-credential {{ dotnet_install.feed_credential }}{% endif %}
+      {% if dotnet_install.architecture is defined %}--architecture {{ dotnet_install.architecture }}{% endif %}
+      {% if dotnet_install.os is defined %}--os {{ dotnet_install.os }}{% endif %}
+      {% if dotnet_install.runtime is defined %}--runtime {{ dotnet_install.runtime }}{% endif %}
+      {% if dotnet_install.dry_run is defined %}--dry-run{% endif %}
+      {% if dotnet_install.no_path is defined %}--no-path{% endif %}
+      {% if dotnet_install.azure_feed is defined %}--azure-feed{% endif %}
+      {% if dotnet_install.uncached_feed is defined %}--uncached-feed{% endif %}
+      {% if dotnet_install.skip_non_versioned_files is defined %}--skip-non-versioned-files{% endif %}
+      {% if dotnet_install.no_cdn is defined %}--skip-non-versioned-files{% endif %}
+      {% if dotnet_install.jsonfile is defined %}--jsonfile {{ dotnet_install.jsonfile }}{% endif %}
+- debug:
+    msg: 'running: {{ dotnet_install_cmd }}'
+- command: '{{ dotnet_install_cmd }}'
+  register: dotnet_install_output
+- debug:
+    msg: '{{ dotnet_install_output.stdout }}'
+- name: '{{ dotnet_install_vars.install_dir }}/dotnet --version'
+  command: '{{ dotnet_install_vars.install_dir }}/dotnet --version'
+  register: dotnet_install_test_version
+- debug:
+    msg: '{{ dotnet_install_test_version.stdout }}'
