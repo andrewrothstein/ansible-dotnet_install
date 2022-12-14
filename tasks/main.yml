@@ -1,5 +1,7 @@
 ---
 - include_role:
+    name: andrewrothstein.dotnet_deps
+- include_role:
     name: andrewrothstein.bash
 - name: resolve platform specific vars
   include_vars: '{{ item }}'
@@ -11,12 +13,6 @@
       skip: true
       paths:
         - '{{ role_path }}/vars'
-- name: installing OS pkg dependencies
-  become: true
-  become_user: root
-  package:
-    name: '{{ dotnet_install_os_dep_pkgs | default([]) }}'
-    state: present
 - name: installing {{ dotnet_install_url }} to {{ dotnet_install_exe }}
   become: true
   become_user: root
