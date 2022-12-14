@@ -2,6 +2,6 @@
 - hosts: all
   vars:
     dotnet_installs:
-      - channel: Current
+      - channel: LTS
   roles:
     - role: '{{ playbook_dir }}'
