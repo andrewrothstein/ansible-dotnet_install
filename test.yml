@@ -1,5 +1,6 @@
 ---
-- hosts: all
+- name: Testing andrewrothtein.dotnet_install
+  hosts: all
   vars:
     dotnet_installs:
       - channel: LTS
