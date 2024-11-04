@@ -26,7 +26,7 @@
   ansible.builtin.command: '{{ dotnet_install_cmd }}'
   changed_when: false
   register: dotnet_install_output
-- name: Output from {{ dotnet_install_cmds }}
+- name: Output from {{ dotnet_install_cmd }}
   ansible.builtin.debug:
     msg: '{{ dotnet_install_output.stdout }}'
 - name: Executing '{{ dotnet_install_vars.install_dir }}/dotnet --version'
