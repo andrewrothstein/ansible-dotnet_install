@@ -1,8 +1,9 @@
 ---
-- include_vars:
+- name: Resolving dotnet_install_vars
+  ansible.builtin.include_vars:
     file: resolve_dotnet_install_vars.yml
-- name: resolving full dotnet-install command
-  set_fact:
+- name: Resolving full dotnet-install command
+  ansible.builtin.set_fact:
     dotnet_install_cmd: >-
       dotnet-install.sh
       --install-dir {{ dotnet_install_vars.install_dir }}
@@ -21,14 +22,17 @@
       {% if dotnet_install.skip_non_versioned_files is defined %}--skip-non-versioned-files{% endif %}
       {% if dotnet_install.no_cdn is defined %}--skip-non-versioned-files{% endif %}
       {% if dotnet_install.jsonfile is defined %}--jsonfile {{ dotnet_install.jsonfile }}{% endif %}
-- debug:
-    msg: 'running: {{ dotnet_install_cmd }}'
-- command: '{{ dotnet_install_cmd }}'
+- name: Executing {{ dotnet_install_cmd }}
+  ansible.builtin.command: '{{ dotnet_install_cmd }}'
+  changed_when: false
   register: dotnet_install_output
-- debug:
+- name: Output from {{ dotnet_install_cmds }}
+  ansible.builtin.debug:
     msg: '{{ dotnet_install_output.stdout }}'
-- name: '{{ dotnet_install_vars.install_dir }}/dotnet --version'
-  command: '{{ dotnet_install_vars.install_dir }}/dotnet --version'
+- name: Executing '{{ dotnet_install_vars.install_dir }}/dotnet --version'
+  ansible.builtin.command: '{{ dotnet_install_vars.install_dir }}/dotnet --version'
+  changed_when: false
   register: dotnet_install_test_version
-- debug:
+- name: Output from '{{ dotnet_install_vars.install_dir }}/dotnet --version'
+  ansible.builtin.debug:
     msg: '{{ dotnet_install_test_version.stdout }}'
