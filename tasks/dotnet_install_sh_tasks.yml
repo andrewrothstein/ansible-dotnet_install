@@ -6,15 +6,15 @@
   ansible.builtin.set_fact:
     dotnet_install_cmd: >-
       dotnet-install.sh
-      --install-dir {{ dotnet_install_vars.install_dir }}
-      --channel {{ dotnet_install_vars.channel }}
-      --version {{ dotnet_install_vars.version }}
+      --install-dir {{ dotnet_install_dir | quote }}
+      --channel {{ dotnet_install_vars.channel | quote }}
+      --version {{ dotnet_install_vars.version | quote }}
       {% if dotnet_install.quality is defined %}--quality {{ dotnet_install.quality }}{% endif %}
       {% if dotnet_install.internal is defined %}--internal{% endif %}
-      {% if dotnet_install.feed_credential is defined %}--feed-credential {{ dotnet_install.feed_credential }}{% endif %}
-      {% if dotnet_install.architecture is defined %}--architecture {{ dotnet_install.architecture }}{% endif %}
-      {% if dotnet_install.os is defined %}--os {{ dotnet_install.os }}{% endif %}
-      {% if dotnet_install.runtime is defined %}--runtime {{ dotnet_install.runtime }}{% endif %}
+      {% if dotnet_install.feed_credential is defined %}--feed-credential {{ dotnet_install.feed_credential | quote }}{% endif %}
+      {% if dotnet_install.architecture is defined %}--architecture {{ dotnet_install.architecture | quote }}{% endif %}
+      {% if dotnet_install.os is defined %}--os {{ dotnet_install.os | quote }}{% endif %}
+      {% if dotnet_install.runtime is defined %}--runtime {{ dotnet_install.runtime | quote }}{% endif %}
       {% if dotnet_install.dry_run is defined %}--dry-run{% endif %}
       {% if dotnet_install.no_path is defined %}--no-path{% endif %}
       {% if dotnet_install.azure_feed is defined %}--azure-feed{% endif %}
@@ -24,15 +24,19 @@
       {% if dotnet_install.jsonfile is defined %}--jsonfile {{ dotnet_install.jsonfile }}{% endif %}
 - name: Executing {{ dotnet_install_cmd }}
   ansible.builtin.command: '{{ dotnet_install_cmd }}'
+  become_user: root
+  become: '{{ dotnet_escalate }}'
   changed_when: false
   register: dotnet_install_output
 - name: Output from {{ dotnet_install_cmd }}
   ansible.builtin.debug:
     msg: '{{ dotnet_install_output.stdout }}'
-- name: Executing '{{ dotnet_install_vars.install_dir }}/dotnet --version'
-  ansible.builtin.command: '{{ dotnet_install_vars.install_dir }}/dotnet --version'
+- name: Executing '{{ dotnet_install_dir }}/dotnet --version'
+  ansible.builtin.command: '{{ dotnet_install_dir }}/dotnet --version'
+  become_user: root
+  become: '{{ dotnet_escalate }}'
   changed_when: false
   register: dotnet_install_test_version
-- name: Output from '{{ dotnet_install_vars.install_dir }}/dotnet --version'
+- name: Output from '{{ dotnet_install_dir }}/dotnet --version'
   ansible.builtin.debug:
     msg: '{{ dotnet_install_test_version.stdout }}'

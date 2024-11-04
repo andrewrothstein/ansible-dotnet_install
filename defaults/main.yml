@@ -4,4 +4,7 @@ dotnet_install_mirror: https://dotnet.microsoft.com/download/dotnet/scripts
 dotnet_install_ver:
   major: 1
 dotnet_install_script_type: sh
-dotnet_install_dir: /usr/local/bin
+dotnet_install_role: sys
+dotnet_install_dirs:
+  sys: /usr/local/bin
+  usr: '{{ ansible_env.HOME }}/.local/bin'
