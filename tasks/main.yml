@@ -1,5 +1,5 @@
 ---
-- name: Installing andrewrothstein.dotnet_geps
+- name: Installing andrewrothstein.dotnet_deps
   ansible.builtin.include_role:
     name: andrewrothstein.dotnet_deps
 - name: Installing andrewrothstein.bash
@@ -16,14 +16,14 @@
       paths:
         - '{{ role_path }}/vars'
 - name: Installing {{ dotnet_install_url }} to {{ dotnet_install_exe }}
-  become: true
+  become: '{{ dotnet_escalate }}'
   become_user: root
   ansible.builtin.get_url:
     url: '{{ dotnet_install_url }}'
     dest: '{{ dotnet_install_exe }}'
     mode: '755'
 - name: Linking {{ dotnet_install_link }} to {{ dotnet_install_exe }}
-  become: true
+  become: '{{ dotnet_escalate }}'
   become_user: root
   ansible.builtin.file:
     src: '{{ dotnet_install_exe }}'
